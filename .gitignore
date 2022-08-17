@@ -1,0 +1,5 @@
+# Project exclude paths
+/back-app/target/
+/front-app/target/
+/middle-app/target/
+/pubsub-lib/target/

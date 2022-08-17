@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: front-app-config
+data:
+  springAppName: front-app
+---
+apiVersion: apps/v1 # need to be 'apps/v1', only 'v1' will fail
+kind: Deployment
+metadata:
+  name: front-app-deployment
+  labels:
+    app: front-app
+spec:
+  selector:
+    matchLabels:
+      app: front-app
+  template:
+    metadata:
+      labels:
+        app: front-app
+    spec:
+      serviceAccountName: pubsub-service-account
+      containers:
+      - name: front-app-container
+        image: asia.gcr.io/aiot-vn-loancloud-dev/front-app:1.0.3
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http-web-svc
+        envFrom:
+        - configMapRef:
+            name: front-app-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-app-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: front-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: http-web-svc

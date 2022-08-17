@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: back-app-config
+data:
+  springAppName: back-app
+---
+apiVersion: apps/v1 # need to be 'apps/v1', only 'v1' will fail
+kind: Deployment
+metadata:
+  name: back-app-deployment
+  labels:
+    app: back-app
+spec:
+  selector:
+    matchLabels:
+      app: back-app
+  template:
+    metadata:
+      labels:
+        app: back-app
+    spec:
+      serviceAccountName: pubsub-service-account
+      containers:
+      - name: back-app-container
+        image: asia.gcr.io/aiot-vn-loancloud-dev/back-app:1.0.3
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http-web-svc
+        envFrom:
+        - configMapRef:
+            name: back-app-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: back-app-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: back-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: http-web-svc

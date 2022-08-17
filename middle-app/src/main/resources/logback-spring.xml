@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds">
+    <contextName>middle-app</contextName>
+
+    <!-- ref.: https://spring-gcp.saturnism.me/app-dev/observability/logging#log-trace-correlation -->
+<!--    <springProfile name="!prod">-->
+<!--        <include resource="org/springframework/boot/logging/logback/defaults.xml"/>-->
+<!--        <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>-->
+<!--        <root level="INFO">-->
+<!--            <appender-ref ref="CONSOLE"/>-->
+<!--        </root>-->
+<!--    </springProfile>-->
+
+<!--    <springProfile name="prod">-->
+<!--        <include resource="com/google/cloud/spring/logging/logback-json-appender.xml"/>-->
+<!--        <root level="INFO">-->
+<!--            <appender-ref ref="CONSOLE_JSON"/>-->
+<!--        </root>-->
+<!--    </springProfile>-->
+
+    <include resource="com/google/cloud/spring/logging/logback-json-appender.xml"/>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE_JSON"/>
+    </root>
+</configuration>
